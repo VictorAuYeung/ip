@@ -15,6 +15,21 @@ public class Walter {
         Scanner scanner = new Scanner(System.in);
 
 
-        System.out.println(exit_msg);
+        while (true) {
+            String input = scanner.nextLine();
+
+            System.out.println(horizontalLine);
+
+            if (input.equals("bye")) {
+                System.out.println("     Bye. Hope to see you again soon!");
+                System.out.println(horizontalLine);
+                break;
+            }
+
+            System.out.println("     " + input);
+            System.out.println(horizontalLine);
+        }
+
+        scanner.close();
     }
 }

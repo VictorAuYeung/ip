@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class Walter {
     public static void main(String[] args) {
         String horizontalLine = "    ____________________________________________________________";
@@ -10,10 +12,8 @@ public class Walter {
                 "____________________________________________________________";
         System.out.println(greeting);
 
-        boolean done = false;
-        while (!done) {
+        Scanner scanner = new Scanner(System.in);
 
-        }
 
         System.out.println(exit_msg);
     }

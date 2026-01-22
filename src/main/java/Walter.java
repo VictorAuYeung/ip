@@ -3,17 +3,17 @@ import java.util.Scanner;
 public class Walter {
     public static void main(String[] args) {
         String horizontalLine = "    ____________________________________________________________";
-        String greeting = "____________________________________________________________\n" +
-                " Hello! I'm Walter\n" +
-                " What can I do for you?\n" +
-                "____________________________________________________________";
+        String greeting = "    ____________________________________________________________\n" +
+                "     Hello! I'm Walter\n" +
+                "     What can I do for you?\n" +
+                "    ____________________________________________________________";
 
-        String exit_msg = " Bye. Hope to see you again soon!\n" +
-                "____________________________________________________________";
         System.out.println(greeting);
 
         Scanner scanner = new Scanner(System.in);
 
+        String[] tasks = new String[100];
+        int taskCounter = 0;
 
         while (true) {
             String input = scanner.nextLine();
@@ -24,10 +24,17 @@ public class Walter {
                 System.out.println("     Bye. Hope to see you again soon!");
                 System.out.println(horizontalLine);
                 break;
+            } else if (input.equals("list")) {
+                for (int i = 0; i < taskCounter; i++) {
+                    System.out.println("     " + (i + 1) + ". " + tasks[i]);
+                }
+                System.out.println(horizontalLine);
+            } else {
+                tasks[taskCounter] = input;
+                taskCounter++;
+                System.out.println("     added: " + input);
+                System.out.println(horizontalLine);
             }
-
-            System.out.println("     " + input);
-            System.out.println(horizontalLine);
         }
 
         scanner.close();

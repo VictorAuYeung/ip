@@ -38,9 +38,29 @@ public class Walter {
                 System.out.println("     OK, I've marked this task as not done yet:");
                 System.out.println("       " + tasks[taskIndex]);
             } else {
-                tasks[taskCounter] = new Task(input);
+                Task newTask = null;
+
+                if (input.startsWith("todo ")) {
+                    newTask = new Todo(input.substring(5));
+                } else if (input.startsWith("deadline ")) {
+                    String[] parts = input.substring(9).split(" /by ");
+                    newTask = new Deadline(parts[0], parts[1]);
+                } else if (input.startsWith("event ")) {
+                    String[] parts = input.substring(6).split(" /from ");
+                    String description = parts[0];
+                    String[] timeParts = parts[1].split(" /to ");
+                    newTask = new Event(description, timeParts[0], timeParts[1]);
+                } else {
+                    System.out.println("     OOPS!!! I'm sorry, but I don't know what that means AHHH :-(");
+                    System.out.println(horizontalLine);
+                    continue;
+                }
+
+                tasks[taskCounter] = newTask;
                 taskCounter++;
-                System.out.println("     added: " + input);
+                System.out.println("     Got it. I've added this task:");
+                System.out.println("       " + newTask);
+                System.out.println("     Now you have " + taskCounter + " tasks in the list.");
             }
             System.out.println(horizontalLine);
         }

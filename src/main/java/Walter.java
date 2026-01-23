@@ -12,7 +12,7 @@ public class Walter {
 
         Scanner scanner = new Scanner(System.in);
 
-        String[] tasks = new String[100];
+        Task[] tasks = new Task[100];
         int taskCounter = 0;
 
         while (true) {
@@ -29,6 +29,8 @@ public class Walter {
                     System.out.println("     " + (i + 1) + ". " + tasks[i]);
                 }
                 System.out.println(horizontalLine);
+            } else if (input.equals("mark")) {
+
             } else {
                 tasks[taskCounter] = input;
                 taskCounter++;

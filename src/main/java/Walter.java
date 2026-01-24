@@ -23,7 +23,7 @@ public class Walter {
                 try {
                     command = Command.valueOf(commandString);
                 } catch (IllegalArgumentException e) {
-                    throw new WalterException("I'm sorry, but I don't know what that means :-(");
+                    throw new WalterException("I'm sorry, but I don't know what that means AHHH :-(");
                 }
 
                 switch (command) {
@@ -92,7 +92,7 @@ public class Walter {
 
                     case EVENT:
                         if (inputs.length < 2 || !inputs[1].contains(" /from ") || !inputs[1].contains(" /to ")) {
-                            throw new WalterException("An event must include '/from' and '/to'.");
+                            throw new WalterException("An event must include '/from' and '/to' to specify the timing.");
                         }
                         String[] eParts = inputs[1].split(" /from ");
                         String description = eParts[0];

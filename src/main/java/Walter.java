@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class Walter {
     public static void main(String[] args) {
@@ -8,8 +9,8 @@ public class Walter {
         System.out.println(horizontalLine);
 
         Scanner scanner = new Scanner(System.in);
-        Task[] tasks = new Task[100];
-        int taskCounter = 0;
+
+        ArrayList<Task> tasks = new ArrayList<>();
 
         while (true) {
             String input = scanner.nextLine();
@@ -22,19 +23,31 @@ public class Walter {
                     break;
                 } else if (input.equals("list")) {
                     System.out.println("     Here are the tasks in your list:");
-                    for (int i = 0; i < taskCounter; i++) {
-                        System.out.println("     " + (i + 1) + "." + tasks[i]);
+                    for (int i = 0; i < tasks.size(); i++) {
+                        System.out.println("     " + (i + 1) + "." + tasks.get(i));
                     }
                 } else if (input.startsWith("mark ")) {
                     int taskIndex = Integer.parseInt(input.substring(5)) - 1;
-                    tasks[taskIndex].markAsDone();
+                    Task t = tasks.get(taskIndex);
+                    t.markAsDone();
                     System.out.println("     Nice! I've marked this task as done:");
-                    System.out.println("       " + tasks[taskIndex]);
+                    System.out.println("       " + t);
                 } else if (input.startsWith("unmark ")) {
                     int taskIndex = Integer.parseInt(input.substring(7)) - 1;
-                    tasks[taskIndex].unmarkAsDone();
+                    Task t = tasks.get(taskIndex);
+                    t.unmarkAsDone();
                     System.out.println("     OK, I've marked this task as not done yet:");
-                    System.out.println("       " + tasks[taskIndex]);
+                    System.out.println("       " + t);
+                } else if (input.startsWith("delete ")) {
+                    int taskIndex = Integer.parseInt(input.substring(7)) - 1;
+
+                    Task t = tasks.get(taskIndex);
+                    tasks.remove(taskIndex);
+
+                    System.out.println("     Noted. I've removed this task:");
+                    System.out.println("       " + t);
+                    System.out.println("     Now you have " + tasks.size() + " tasks in the list.");
+
                 } else {
                     Task newTask = null;
 
@@ -67,11 +80,10 @@ public class Walter {
                         throw new WalterException("I'm sorry, but I don't know what that means :-(");
                     }
 
-                    tasks[taskCounter] = newTask;
-                    taskCounter++;
+                    tasks.add(newTask);
                     System.out.println("     Got it. I've added this task:");
                     System.out.println("       " + newTask);
-                    System.out.println("     Now you have " + taskCounter + " tasks in the list.");
+                    System.out.println("     Now you have " + tasks.size() + " tasks in the list.");
                 }
 
             } catch (WalterException e) {

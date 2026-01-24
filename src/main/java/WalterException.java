@@ -1,4 +1,5 @@
-package PACKAGE_NAME;
-
-public class WalterException {
+public class WalterException extends Exception {
+    public WalterException(String message) {
+        super(message);
+    }
 }

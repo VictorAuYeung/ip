@@ -9,7 +9,9 @@ public class Walter {
         System.out.println(horizontalLine);
 
         Scanner scanner = new Scanner(System.in);
-        ArrayList<Task> tasks = new ArrayList<>();
+
+        // Load data at the start
+        ArrayList<Task> tasks = Storage.load();
 
         while (true) {
             String input = scanner.nextLine();
@@ -45,6 +47,7 @@ public class Walter {
                         int markIndex = Integer.parseInt(inputs[1]) - 1;
                         Task tMark = tasks.get(markIndex);
                         tMark.markAsDone();
+                        Storage.save(tasks);
                         System.out.println("     Nice! I've marked this task as done:");
                         System.out.println("       " + tMark);
                         break;
@@ -54,6 +57,7 @@ public class Walter {
                         int unmarkIndex = Integer.parseInt(inputs[1]) - 1;
                         Task tUnmark = tasks.get(unmarkIndex);
                         tUnmark.unmarkAsDone();
+                        Storage.save(tasks);
                         System.out.println("     OK, I've marked this task as not done yet:");
                         System.out.println("       " + tUnmark);
                         break;
@@ -63,6 +67,7 @@ public class Walter {
                         int delIndex = Integer.parseInt(inputs[1]) - 1;
                         Task tDel = tasks.get(delIndex);
                         tasks.remove(delIndex);
+                        Storage.save(tasks);
                         System.out.println("     Noted. I've removed this task:");
                         System.out.println("       " + tDel);
                         System.out.println("     Now you have " + tasks.size() + " tasks in the list.");
@@ -74,6 +79,7 @@ public class Walter {
                         }
                         Task todo = new Todo(inputs[1]);
                         tasks.add(todo);
+                        Storage.save(tasks);
                         printAdded(todo, tasks.size());
                         break;
 
@@ -87,6 +93,7 @@ public class Walter {
                         }
                         Task deadline = new Deadline(dParts[0], dParts[1]);
                         tasks.add(deadline);
+                        Storage.save(tasks);
                         printAdded(deadline, tasks.size());
                         break;
 
@@ -99,6 +106,7 @@ public class Walter {
                         String[] timeParts = eParts[1].split(" /to ");
                         Task event = new Event(description, timeParts[0], timeParts[1]);
                         tasks.add(event);
+                        Storage.save(tasks);
                         printAdded(event, tasks.size());
                         break;
                 }

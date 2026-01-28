@@ -1,5 +1,6 @@
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.time.format.DateTimeParseException;
 
 public class Walter {
     public static void main(String[] args) {
@@ -113,6 +114,9 @@ public class Walter {
 
             } catch (WalterException e) {
                 System.out.println("     OOPS!!! " + e.getMessage());
+            } catch (DateTimeParseException e) {
+                System.out.println("     OOPS!!! Invalid date format. Please use 'd/M/yyyy HHmm'.");
+                System.out.println("     Example: 2/12/2019 1800");
             } catch (NumberFormatException e) {
                 System.out.println("     OOPS!!! Please enter a valid number.");
             } catch (IndexOutOfBoundsException e) {

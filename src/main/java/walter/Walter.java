@@ -2,12 +2,29 @@ package walter;
 
 import java.time.format.DateTimeParseException;
 
+/**
+ * The main entry point for the Walter chatbot.
+ * <p>
+ * This class initializes the application components ({@link Ui}, {@link Storage},
+ * and {@link TaskList}) and contains the main program loop. It coordinates the
+ * interaction between the user, the data logic, and the file storage system.
+ */
 public class Walter {
 
     private Storage storage;
     private TaskList tasks;
     private Ui ui;
 
+
+    /**
+     * Constructs a new {@code Walter} application instance.
+     * <p>
+     * Initializes the UI and Storage components. It attempts to load existing
+     * tasks from the specified file path. If loading fails (e.g., file not found
+     * or corrupted), it initializes an empty task list and displays an error to the user.
+     *
+     * @param filePath The relative path to the file where task data is stored.
+     */
     public Walter(String filePath) {
         ui = new Ui();
         storage = new Storage(filePath);

@@ -2,6 +2,7 @@ package walter;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 public class Deadline extends Task {
 
@@ -21,7 +22,7 @@ public class Deadline extends Task {
 
     @Override
     public String toString() {
-        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("MMM dd yyyy h:mm a");
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("MMM dd yyyy h:mm a", Locale.US);
         return "[D]" + super.toString() + " (by: " + by.format(outputFormatter) + ")";
     }
 }

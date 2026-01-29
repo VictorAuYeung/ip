@@ -7,6 +7,11 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+
+/**
+ * Represents the storage backend for Walter.
+ * Handles loading and saving tasks to the hard disk.
+ */
 public class Storage {
     private final String filePath;
 
@@ -15,9 +20,10 @@ public class Storage {
     }
 
     /**
-     * Loads tasks from the hard disk.
-     * @return ArrayList of Tasks
-     * @throws WalterException if the file cannot be accessed
+     * Loads tasks from the file system.
+     *
+     * @return An ArrayList of tasks.
+     * @throws WalterException If the file cannot be read.
      */
     public ArrayList<Task> load() throws WalterException {
         ArrayList<Task> tasks = new ArrayList<>();

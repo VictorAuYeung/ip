@@ -1,6 +1,7 @@
 package walter;
 
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 
 /**
  * The main entry point for the Walter chatbot.
@@ -118,7 +119,15 @@ public class Walter {
                         storage.save(tasks);
                         printAdded(deadline);
                         break;
-
+                    case FIND:
+                    if (inputs.length < 2) throw new WalterException("Please specify a keyword to search.");
+                    String keyword = inputs[1];
+                    ArrayList<Task> foundTasks = tasks.find(keyword); // You need to implement this in TaskList
+                    ui.showMessage("Here are the matching tasks in your list:");
+                    for (int i = 0; i < foundTasks.size(); i++) {
+                        ui.showMessage((i + 1) + "." + foundTasks.get(i));
+                    }
+                    break;
                     case EVENT:
                         if (inputs.length < 2 || !inputs[1].contains(" /from ") || !inputs[1].contains(" /to ")) {
                             throw new WalterException("An event must include '/from' and '/to' to specify the timing.");

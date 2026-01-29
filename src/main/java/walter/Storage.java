@@ -8,35 +8,23 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Storage {
-    private static final String FILE_PATH = "./data/walter.txt"; // Relative path
+    private final String filePath;
 
-    public static void save(ArrayList<Task> tasks) {
-        try {
-            File file = new File(FILE_PATH);
-            File parentDir = file.getParentFile();
-
-            // Create the directory
-            if (parentDir != null && !parentDir.exists()) {
-                parentDir.mkdirs();
-            }
-
-            // Write tasks to file
-            FileWriter writer = new FileWriter(file);
-            for (Task task : tasks) {
-                writer.write(task.toFileFormat() + "\n");
-            }
-            writer.close();
-        } catch (IOException e) {
-            System.out.println("Error saving tasks: " + e.getMessage());
-        }
+    public Storage(String filePath) {
+        this.filePath = filePath;
     }
 
-    public static ArrayList<Task> load() {
+    /**
+     * Loads tasks from the hard disk.
+     * @return ArrayList of Tasks
+     * @throws WalterException if the file cannot be accessed
+     */
+    public ArrayList<Task> load() throws WalterException {
         ArrayList<Task> tasks = new ArrayList<>();
-        File file = new File(FILE_PATH);
+        File file = new File(this.filePath);
 
         if (!file.exists()) {
-            return tasks; // Return empty list if file doesn't exist yet
+            return tasks;
         }
 
         try {
@@ -67,8 +55,34 @@ public class Storage {
             }
             scanner.close();
         } catch (FileNotFoundException e) {
-            System.out.println("File not found, starting with empty list.");
+            throw new WalterException("Error loading file: " + e.getMessage());
+        } catch (Exception e) {
+            throw new WalterException("Corrupted data file.");
         }
         return tasks;
+    }
+
+    /**
+     * Saves the tasks to the hard disk.
+     * @param taskList The TaskList object containing the tasks to save
+     */
+    public void save(TaskList taskList) {
+        try {
+            File file = new File(this.filePath);
+            File parentDir = file.getParentFile();
+
+            if (parentDir != null && !parentDir.exists()) {
+                parentDir.mkdirs();
+            }
+
+            FileWriter writer = new FileWriter(file);
+
+            for (Task task : taskList.getAllTasks()) {
+                writer.write(task.toFileFormat() + "\n");
+            }
+            writer.close();
+        } catch (IOException e) {
+            System.out.println("Error saving tasks: " + e.getMessage());
+        }
     }
 }

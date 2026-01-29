@@ -1,3 +1,5 @@
+package walter;
+
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.time.format.DateTimeParseException;
@@ -6,7 +8,7 @@ public class Walter {
     public static void main(String[] args) {
         String horizontalLine = "    ____________________________________________________________";
         System.out.println(horizontalLine);
-        System.out.println("     Hello! I'm Walter\n     What can I do for you?");
+        System.out.println("     Hello! I'm walter.Walter\n     What can I do for you?");
         System.out.println(horizontalLine);
 
         Scanner scanner = new Scanner(System.in);

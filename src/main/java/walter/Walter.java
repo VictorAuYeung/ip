@@ -1,45 +1,49 @@
-import java.util.Scanner;
-import java.util.ArrayList;
+package walter;
+
 import java.time.format.DateTimeParseException;
 
 public class Walter {
-    public static void main(String[] args) {
-        String horizontalLine = "    ____________________________________________________________";
-        System.out.println(horizontalLine);
-        System.out.println("     Hello! I'm Walter\n     What can I do for you?");
-        System.out.println(horizontalLine);
 
-        Scanner scanner = new Scanner(System.in);
+    private Storage storage;
+    private TaskList tasks;
+    private Ui ui;
 
-        // Load data at the start
-        ArrayList<Task> tasks = Storage.load();
+    public Walter(String filePath) {
+        ui = new Ui();
+        storage = new Storage(filePath);
+        try {
+            tasks = new TaskList(storage.load());
+        } catch (WalterException e) {
+            ui.showLoadingError();
+            tasks = new TaskList();
+        }
+    }
 
-        while (true) {
-            String input = scanner.nextLine();
-            System.out.println(horizontalLine);
+    public void run() {
+        ui.showWelcome();
+        boolean isExit = false;
 
+        while (!isExit) {
             try {
-                String[] inputs = input.split(" ", 2);
-                String commandString = inputs[0].toUpperCase();
+                String fullCommand = ui.readCommand();
+                ui.showLine();
 
-                Command command;
-                try {
-                    command = Command.valueOf(commandString);
-                } catch (IllegalArgumentException e) {
-                    throw new WalterException("I'm sorry, but I don't know what that means AHHH :-(");
-                }
+                // Parse the Command Type using the Parser class
+                Command command = Parser.parse(fullCommand);
+
+                // split arguments for the logic below
+                String[] inputs = fullCommand.split(" ", 2);
 
                 switch (command) {
                     case BYE:
-                        System.out.println("     Bye. Hope to see you again soon!");
-                        System.out.println(horizontalLine);
-                        scanner.close();
-                        return;
+                        isExit = true;
+                        ui.showBye();
+                        break;
 
                     case LIST:
-                        System.out.println("     Here are the tasks in your list:");
+                        ui.showMessage("Here are the tasks in your list:");
                         for (int i = 0; i < tasks.size(); i++) {
-                            System.out.println("     " + (i + 1) + "." + tasks.get(i));
+                            ui.showMessage((i + 1) + "." + tasks.get(i));
                         }
                         break;
 
@@ -48,9 +52,9 @@ public class Walter {
                         int markIndex = Integer.parseInt(inputs[1]) - 1;
                         Task tMark = tasks.get(markIndex);
                         tMark.markAsDone();
-                        Storage.save(tasks);
-                        System.out.println("     Nice! I've marked this task as done:");
-                        System.out.println("       " + tMark);
+                        storage.save(tasks);
+                        ui.showMessage("Nice! I've marked this task as done:");
+                        ui.showMessage("  " + tMark);
                         break;
 
                     case UNMARK:
@@ -58,20 +62,20 @@ public class Walter {
                         int unmarkIndex = Integer.parseInt(inputs[1]) - 1;
                         Task tUnmark = tasks.get(unmarkIndex);
                         tUnmark.unmarkAsDone();
-                        Storage.save(tasks);
-                        System.out.println("     OK, I've marked this task as not done yet:");
-                        System.out.println("       " + tUnmark);
+                        storage.save(tasks);
+                        ui.showMessage("OK, I've marked this task as not done yet:");
+                        ui.showMessage("  " + tUnmark);
                         break;
 
                     case DELETE:
                         if (inputs.length < 2) throw new WalterException("Please specify which task to delete.");
                         int delIndex = Integer.parseInt(inputs[1]) - 1;
                         Task tDel = tasks.get(delIndex);
-                        tasks.remove(delIndex);
-                        Storage.save(tasks);
-                        System.out.println("     Noted. I've removed this task:");
-                        System.out.println("       " + tDel);
-                        System.out.println("     Now you have " + tasks.size() + " tasks in the list.");
+                        tasks.delete(delIndex);
+                        storage.save(tasks);
+                        ui.showMessage("Noted. I've removed this task:");
+                        ui.showMessage("  " + tDel);
+                        ui.showMessage("Now you have " + tasks.size() + " tasks in the list.");
                         break;
 
                     case TODO:
@@ -80,8 +84,8 @@ public class Walter {
                         }
                         Task todo = new Todo(inputs[1]);
                         tasks.add(todo);
-                        Storage.save(tasks);
-                        printAdded(todo, tasks.size());
+                        storage.save(tasks);
+                        printAdded(todo);
                         break;
 
                     case DEADLINE:
@@ -94,8 +98,8 @@ public class Walter {
                         }
                         Task deadline = new Deadline(dParts[0], dParts[1]);
                         tasks.add(deadline);
-                        Storage.save(tasks);
-                        printAdded(deadline, tasks.size());
+                        storage.save(tasks);
+                        printAdded(deadline);
                         break;
 
                     case EVENT:
@@ -107,29 +111,32 @@ public class Walter {
                         String[] timeParts = eParts[1].split(" /to ");
                         Task event = new Event(description, timeParts[0], timeParts[1]);
                         tasks.add(event);
-                        Storage.save(tasks);
-                        printAdded(event, tasks.size());
+                        storage.save(tasks);
+                        printAdded(event);
                         break;
                 }
-
             } catch (WalterException e) {
-                System.out.println("     OOPS!!! " + e.getMessage());
+                ui.showError(e.getMessage());
             } catch (DateTimeParseException e) {
-                System.out.println("     OOPS!!! Invalid date format. Please use 'd/M/yyyy HHmm'.");
-                System.out.println("     Example: 2/12/2019 1800");
+                ui.showError("Invalid date format. Please use 'd/M/yyyy HHmm'.");
+                ui.showError("Example: 2/12/2019 1800");
             } catch (NumberFormatException e) {
-                System.out.println("     OOPS!!! Please enter a valid number.");
+                ui.showError("Please enter a valid number.");
             } catch (IndexOutOfBoundsException e) {
-                System.out.println("     OOPS!!! That task number does not exist.");
+                ui.showError("That task number does not exist.");
+            } finally {
+                ui.showLine();
             }
-
-            System.out.println(horizontalLine);
         }
     }
 
-    private static void printAdded(Task task, int size) {
-        System.out.println("     Got it. I've added this task:");
-        System.out.println("       " + task);
-        System.out.println("     Now you have " + size + " tasks in the list.");
+    private void printAdded(Task task) {
+        ui.showMessage("Got it. I've added this task:");
+        ui.showMessage("  " + task);
+        ui.showMessage("Now you have " + tasks.size() + " tasks in the list.");
+    }
+
+    public static void main(String[] args) {
+        new Walter("data/walter.txt").run();
     }
 }

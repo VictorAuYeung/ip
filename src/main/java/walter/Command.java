@@ -1,3 +1,5 @@
+package walter;
+
 public enum Command {
     // List all possible commands here
     BYE,

@@ -66,7 +66,7 @@ public class Walter {
                     break;
 
                 case MARK:
-                    if (inputs.length < 2) { 
+                    if (inputs.length < 2) {
                         throw new WalterException("Please specify which task to mark.");
                     }
                     int markIndex = Integer.parseInt(inputs[1]) - 1;
@@ -163,6 +163,112 @@ public class Walter {
             } finally {
                 ui.showLine();
             }
+        }
+    }
+
+    /**
+     * Generates a response for the user's chat message.
+     *
+     * @param input The user command string.
+     * @return The response string from the bot.
+     */
+    public String getResponse(String input) {
+        try {
+            Command command = Parser.parse(input);
+            String[] inputs = input.split(" ", 2);
+            switch (command) {
+            case BYE:
+                return "Bye. Hope to see you again soon!";
+            case LIST:
+                StringBuilder sb = new StringBuilder("Here are the tasks in your list:\n");
+                for (int i = 0; i < tasks.size(); i++) {
+                    sb.append((i + 1) + "." + tasks.get(i) + "\n");
+                }
+                return sb.toString();
+            case MARK:
+                if (inputs.length < 2) {
+                    throw new WalterException("Please specify which task to mark.");
+                }
+                int markIndex = Integer.parseInt(inputs[1]) - 1;
+                Task tMark = tasks.get(markIndex);
+                tMark.markAsDone();
+                storage.save(tasks);
+                return "Nice! I've marked this task as done:\n  " + tMark;
+            case UNMARK:
+                if (inputs.length < 2) {
+                    throw new WalterException("Please specify which task to unmark.");
+                }
+                int unmarkIndex = Integer.parseInt(inputs[1]) - 1;
+                Task tUnmark = tasks.get(unmarkIndex);
+                tUnmark.unmarkAsDone();
+                storage.save(tasks);
+                return "OK, I've marked this task as not done yet:\n  " + tUnmark;
+            case DELETE:
+                if (inputs.length < 2) {
+                    throw new WalterException("Please specify which task to delete.");
+                }
+                int delIndex = Integer.parseInt(inputs[1]) - 1;
+                Task tDel = tasks.get(delIndex);
+                tasks.delete(delIndex);
+                storage.save(tasks);
+                return "Noted. I've removed this task:\n  " + tDel + "\nNow you have " + tasks.size()
+                        + " tasks in the list.";
+            case TODO:
+                if (inputs.length < 2 || inputs[1].trim().isEmpty()) {
+                    throw new WalterException("The description of a todo cannot be empty.");
+                }
+                Task todo = new Todo(inputs[1]);
+                tasks.add(todo);
+                storage.save(tasks);
+                return "Got it. I've added this task:\n  " + todo + "\nNow you have " + tasks.size()
+                        + " tasks in the list.";
+            case DEADLINE:
+                if (inputs.length < 2 || !inputs[1].contains(" /by ")) {
+                    throw new WalterException("A deadline must include '/by' to specify the date.");
+                }
+                String[] dParts = inputs[1].split(" /by ");
+                if (dParts[0].trim().isEmpty()) {
+                    throw new WalterException("The description of a deadline cannot be empty.");
+                }
+                Task deadline = new Deadline(dParts[0], dParts[1]);
+                tasks.add(deadline);
+                storage.save(tasks);
+                return "Got it. I've added this task:\n  " + deadline + "\nNow you have "
+                        + tasks.size() + " tasks in the list.";
+            case EVENT:
+                if (inputs.length < 2 || !inputs[1].contains(" /from ") || !inputs[1].contains(" /to ")) {
+                    throw new WalterException("An event must include '/from' and '/to' to specify the timing.");
+                }
+                String[] eParts = inputs[1].split(" /from ");
+                String description = eParts[0];
+                String[] timeParts = eParts[1].split(" /to ");
+                Task event = new Event(description, timeParts[0], timeParts[1]);
+                tasks.add(event);
+                storage.save(tasks);
+                return "Got it. I've added this task:\n  " + event + "\nNow you have " + tasks.size()
+                        + " tasks in the list.";
+            case FIND:
+                if (inputs.length < 2) {
+                    throw new WalterException("Please specify a keyword to search.");
+                }
+                String keyword = inputs[1];
+                ArrayList<Task> foundTasks = tasks.find(keyword);
+                StringBuilder sbFind = new StringBuilder("Here are the matching tasks in your list:\n");
+                for (int i = 0; i < foundTasks.size(); i++) {
+                    sbFind.append((i + 1) + "." + foundTasks.get(i) + "\n");
+                }
+                return sbFind.toString();
+            default:
+                return "Unknown command.";
+            }
+        } catch (WalterException e) {
+            return "OOPS!!! " + e.getMessage();
+        } catch (DateTimeParseException e) {
+            return "OOPS!!! Invalid date format. Please use 'd/M/yyyy HHmm'.\nExample: 2/12/2019 1800";
+        } catch (NumberFormatException e) {
+            return "OOPS!!! Please enter a valid number.";
+        } catch (IndexOutOfBoundsException e) {
+            return "OOPS!!! That task number does not exist.";
         }
     }
 

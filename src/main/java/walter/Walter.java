@@ -2,6 +2,7 @@ package walter;
 
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.stream.IntStream;
 
 /**
  * The main entry point for the Walter chatbot.
@@ -60,9 +61,8 @@ public class Walter {
 
                 case LIST:
                     ui.showMessage("Here are the tasks in your list:");
-                    for (int i = 0; i < tasks.size(); i++) {
-                        ui.showMessage((i + 1) + "." + tasks.get(i));
-                    }
+                    IntStream.range(0, tasks.size())
+                            .forEach(i -> ui.showMessage((i + 1) + "." + tasks.get(i)));
                     break;
 
                 case MARK:
@@ -130,11 +130,10 @@ public class Walter {
                         throw new WalterException("Please specify a keyword to search.");
                     }
                     String keyword = inputs[1];
-                    ArrayList<Task> foundTasks = tasks.find(keyword); // You need to implement this in TaskList
+                    ArrayList<Task> foundTasks = tasks.find(keyword);
                     ui.showMessage("Here are the matching tasks in your list:");
-                    for (int i = 0; i < foundTasks.size(); i++) {
-                        ui.showMessage((i + 1) + "." + foundTasks.get(i));
-                    }
+                    IntStream.range(0, foundTasks.size())
+                            .forEach(i -> ui.showMessage((i + 1) + "." + foundTasks.get(i)));
                     break;
                 case EVENT:
                     if (inputs.length < 2 || !inputs[1].contains(" /from ") || !inputs[1].contains(" /to ")) {
@@ -181,9 +180,8 @@ public class Walter {
                 return "Bye. Hope to see you again soon!";
             case LIST:
                 StringBuilder sb = new StringBuilder("Here are the tasks in your list:\n");
-                for (int i = 0; i < tasks.size(); i++) {
-                    sb.append((i + 1) + "." + tasks.get(i) + "\n");
-                }
+                IntStream.range(0, tasks.size())
+                        .forEach(i -> sb.append((i + 1) + "." + tasks.get(i) + "\n"));
                 return sb.toString();
             case MARK:
                 if (inputs.length < 2) {
@@ -254,9 +252,8 @@ public class Walter {
                 String keyword = inputs[1];
                 ArrayList<Task> foundTasks = tasks.find(keyword);
                 StringBuilder sbFind = new StringBuilder("Here are the matching tasks in your list:\n");
-                for (int i = 0; i < foundTasks.size(); i++) {
-                    sbFind.append((i + 1) + "." + foundTasks.get(i) + "\n");
-                }
+                IntStream.range(0, foundTasks.size())
+                        .forEach(i -> sbFind.append((i + 1) + "." + foundTasks.get(i) + "\n"));
                 return sbFind.toString();
             default:
                 return "Unknown command.";

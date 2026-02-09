@@ -26,7 +26,9 @@ public class Storage {
      * @throws WalterException If the file cannot be read.
      */
     public ArrayList<Task> load() throws WalterException {
+        assert this.filePath != null : "File path should not be null";
         ArrayList<Task> tasks = new ArrayList<>();
+        assert tasks != null : "Tasks list should be initialized";
         File file = new File(this.filePath);
 
         if (!file.exists()) {
@@ -37,9 +39,12 @@ public class Storage {
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
+                assert line != null : "Line read from file should not be null";
                 String[] parts = line.split(" \\| ");
+                assert parts.length >= 3 : "Task file format should have at least 3 parts";
 
                 Task task = null;
+                assert parts[0] != null : "Task type should not be null";
                 switch (parts[0]) {
                 case "T":
                     task = new Todo(parts[2]);
@@ -73,6 +78,8 @@ public class Storage {
      * @param taskList The TaskList object containing the tasks to save
      */
     public void save(TaskList taskList) {
+        assert taskList != null : "TaskList to save cannot be null";
+        assert this.filePath != null : "File path should not be null";
         try {
             File file = new File(this.filePath);
             File parentDir = file.getParentFile();

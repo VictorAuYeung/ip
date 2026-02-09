@@ -2,6 +2,7 @@ package walter;
 
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.stream.IntStream;
 
 /**
  * The main entry point for the Walter chatbot.
@@ -66,9 +67,8 @@ public class Walter {
 
                 case LIST:
                     ui.showMessage("Here are the tasks in your list:");
-                    for (int i = 0; i < tasks.size(); i++) {
-                        ui.showMessage((i + 1) + "." + tasks.get(i));
-                    }
+                    IntStream.range(0, tasks.size())
+                            .forEach(i -> ui.showMessage((i + 1) + "." + tasks.get(i)));
                     break;
 
                 case MARK:
@@ -149,9 +149,8 @@ public class Walter {
                     ArrayList<Task> foundTasks = tasks.find(keyword);
                     assert foundTasks != null : "Found tasks list should not be null"; // You need to implement this in TaskList
                     ui.showMessage("Here are the matching tasks in your list:");
-                    for (int i = 0; i < foundTasks.size(); i++) {
-                        ui.showMessage((i + 1) + "." + foundTasks.get(i));
-                    }
+                    IntStream.range(0, foundTasks.size())
+                            .forEach(i -> ui.showMessage((i + 1) + "." + foundTasks.get(i)));
                     break;
                 case EVENT:
                     if (inputs.length < 2 || !inputs[1].contains(" /from ") || !inputs[1].contains(" /to ")) {
@@ -205,11 +204,12 @@ public class Walter {
                 return "Bye. Hope to see you again soon!";
             case LIST:
                 StringBuilder sb = new StringBuilder("Here are the tasks in your list:\n");
-                for (int i = 0; i < tasks.size(); i++) {
-                    Task task = tasks.get(i);
-                    assert task != null : "Task in list should not be null";
-                    sb.append((i + 1) + "." + task + "\n");
-                }
+                IntStream.range(0, tasks.size())
+                        .peek(i -> {
+                            Task task = tasks.get(i);
+                            assert task != null : "Task in list should not be null";
+                        })
+                        .forEach(i -> sb.append((i + 1) + "." + tasks.get(i) + "\n"));
                 String resultList = sb.toString();
                 assert resultList != null : "Result string should not be null";
                 return resultList;
@@ -308,11 +308,12 @@ public class Walter {
                 ArrayList<Task> foundTasks = tasks.find(keyword);
                 assert foundTasks != null : "Found tasks list should not be null";
                 StringBuilder sbFind = new StringBuilder("Here are the matching tasks in your list:\n");
-                for (int i = 0; i < foundTasks.size(); i++) {
-                    Task foundTask = foundTasks.get(i);
-                    assert foundTask != null : "Found task should not be null";
-                    sbFind.append((i + 1) + "." + foundTask + "\n");
-                }
+                IntStream.range(0, foundTasks.size())
+                    .peek(i -> {
+                        Task foundTask = foundTasks.get(i);
+                        assert foundTask != null : "Found task should not be null";
+                    })
+                    .forEach(i -> sbFind.append((i + 1) + "." + foundTasks.get(i) + "\n"));
                 String findResult = sbFind.toString();
                 assert findResult != null : "Result string should not be null";
                 return findResult;

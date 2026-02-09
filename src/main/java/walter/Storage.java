@@ -90,9 +90,14 @@ public class Storage {
 
             FileWriter writer = new FileWriter(file);
 
-            for (Task task : taskList.getAllTasks()) {
-                writer.write(task.toFileFormat() + "\n");
-            }
+            taskList.getAllTasks().stream()
+                    .forEach(task -> {
+                        try {
+                            writer.write(task.toFileFormat() + "\n");
+                        } catch (IOException e) {
+                            System.out.println("Error writing task: " + e.getMessage());
+                        }
+                    });
             writer.close();
         } catch (IOException e) {
             System.out.println("Error saving tasks: " + e.getMessage());

@@ -1,6 +1,7 @@
 package walter;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 /**
  * Represents a collection of tasks.
@@ -82,15 +83,20 @@ public class TaskList {
         return tasks;
     }
 
+    /**
+     * Finds all tasks that contain the specified keyword.
+     *
+     * @param keyword The keyword to search for in task descriptions.
+     * @return An {@code ArrayList} of tasks that match the keyword.
+     */
     public ArrayList<Task> find(String keyword) {
         assert keyword != null : "Search keyword cannot be null";
-        ArrayList<Task> result = new ArrayList<>();
-        for (Task task : tasks) {
-            assert task != null : "Task in list should not be null";
-            if (task.toString().contains(keyword)) {
-                result.add(task);
-            }
-        }
+        ArrayList<Task> result = tasks.stream()
+                .filter(task -> {
+                    assert task != null : "Task in list should not be null";
+                    return task.toString().contains(keyword);
+                })
+                .collect(Collectors.toCollection(ArrayList::new));
         assert result != null : "Result list should not be null";
         return result;
     }

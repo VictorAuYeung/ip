@@ -17,6 +17,7 @@ public class TaskList {
      */
     public TaskList() {
         this.tasks = new ArrayList<>();
+        assert this.tasks != null : "Tasks list should be initialized";
     }
 
     /**
@@ -25,6 +26,7 @@ public class TaskList {
      * @param tasks An {@code ArrayList} of {@link Task} objects to initialize the list with.
      */
     public TaskList(ArrayList<Task> tasks) {
+        assert tasks != null : "Provided tasks list cannot be null";
         this.tasks = tasks;
     }
 
@@ -34,6 +36,7 @@ public class TaskList {
      * @param task The {@link Task} object to be added.
      */
     public void add(Task task) {
+        assert task != null : "Task to be added cannot be null";
         tasks.add(task);
     }
 
@@ -44,6 +47,7 @@ public class TaskList {
      * @throws IndexOutOfBoundsException if the index is out of range.
      */
     public void delete(int index) {
+        assert index >= 0 && index < tasks.size() : "Index out of bounds: " + index;
         tasks.remove(index);
     }
 
@@ -55,7 +59,10 @@ public class TaskList {
      * @throws IndexOutOfBoundsException if the index is out of range.
      */
     public Task get(int index) {
-        return tasks.get(index);
+        assert index >= 0 && index < tasks.size() : "Index out of bounds: " + index;
+        Task task = tasks.get(index);
+        assert task != null : "Retrieved task should not be null";
+        return task;
     }
 
     /**
@@ -83,8 +90,14 @@ public class TaskList {
      * @return An {@code ArrayList} of tasks that match the keyword.
      */
     public ArrayList<Task> find(String keyword) {
-        return tasks.stream()
-                .filter(task -> task.toString().contains(keyword))
+        assert keyword != null : "Search keyword cannot be null";
+        ArrayList<Task> result = tasks.stream()
+                .filter(task -> {
+                    assert task != null : "Task in list should not be null";
+                    return task.toString().contains(keyword);
+                })
                 .collect(Collectors.toCollection(ArrayList::new));
+        assert result != null : "Result list should not be null";
+        return result;
     }
 }

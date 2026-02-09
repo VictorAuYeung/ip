@@ -5,6 +5,7 @@ public class Task {
     protected boolean isDone;
 
     public Task(String description) {
+        assert description != null : "Task description cannot be null";
         this.description = description;
         this.isDone = false;
     }
@@ -14,10 +15,12 @@ public class Task {
     }
 
     public void markAsDone() {
+        assert !isDone : "Task is already marked as done";
         this.isDone = true;
     }
 
     public void unmarkAsDone() {
+        assert isDone : "Task is already marked as not done";
         this.isDone = false;
     }
 

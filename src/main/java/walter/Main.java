@@ -23,7 +23,7 @@ public class Main extends Application {
     private Scene scene;
 
     private Image userImage = new Image(this.getClass().getResourceAsStream("/images/DaUser.png"));
-    private Image walterImage = new Image(this.getClass().getResourceAsStream("/images/DaDuke.png"));
+    private Image walterImage = new Image(this.getClass().getResourceAsStream("/images/DaWalter.png"));
 
     private Walter walter = new Walter("data/walter.txt");
 
@@ -88,6 +88,12 @@ public class Main extends Application {
 
         // Scroll down to the end every time dialogContainer's height changes.
         dialogContainer.heightProperty().addListener((observable) -> scrollPane.setVvalue(1.0));
+
+        // Step 4. Display welcome message on startup
+        String welcomeMessage = "Hello! I'm Walter\nWhat can I do for you?";
+        dialogContainer.getChildren().add(
+                DialogBox.getWalterDialog(welcomeMessage, walterImage)
+        );
     }
 
     /**

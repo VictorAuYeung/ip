@@ -17,6 +17,7 @@ public class Ui {
      */
     public Ui() {
         this.scanner = new Scanner(System.in);
+        assert this.scanner != null : "Scanner should be initialized";
     }
 
     /**
@@ -75,6 +76,7 @@ public class Ui {
      * @param message The message content to be displayed.
      */
     public void showMessage(String message) {
+        assert message != null : "Message to display cannot be null";
         System.out.println("     " + message);
     }
 }

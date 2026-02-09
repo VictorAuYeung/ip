@@ -1,7 +1,7 @@
 package walter;
 
 /**
- * Represents a basic task without any associated date or time constraints.
+ * Represents a basic task without any associated date and time constraints.
  * <p>
  * A {@code Todo} is the simplest form of a {@link Task}, consisting only of
  * a description and a completion status. It does not have a deadline or an

@@ -173,8 +173,8 @@ public class Walter {
             } catch (WalterException e) {
                 ui.showError(e.getMessage());
             } catch (DateTimeParseException e) {
-                ui.showError("Invalid date format. Please use 'd/M/yyyy HHmm'.");
-                ui.showError("Example: 2/12/2019 1800");
+                ui.showError("Invalid date format. Please use 'd/M/yyyy HHmm' or natural language (e.g., 'today', 'tomorrow', 'Mon').");
+                ui.showError("Example: 2/12/2019 1800 or Mon 1800");
             } catch (NumberFormatException e) {
                 ui.showError("Please enter a valid number.");
             } catch (IndexOutOfBoundsException e) {

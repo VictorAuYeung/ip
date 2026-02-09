@@ -30,8 +30,7 @@ public class Deadline extends Task {
         super(description);
         assert by != null : "Due date string cannot be null";
         assert !by.trim().isEmpty() : "Due date string cannot be empty";
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
-        this.by = LocalDateTime.parse(by, formatter);
+        this.by = DateParser.parse(by);
         assert this.by != null : "Parsed deadline date should not be null";
     }
 

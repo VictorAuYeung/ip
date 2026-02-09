@@ -36,9 +36,8 @@ public class Event extends Task {
         assert to != null : "End time string cannot be null";
         assert !from.trim().isEmpty() : "Start time string cannot be empty";
         assert !to.trim().isEmpty() : "End time string cannot be empty";
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
-        this.from = LocalDateTime.parse(from, formatter);
-        this.to = LocalDateTime.parse(to, formatter);
+        this.from = DateParser.parse(from);
+        this.to = DateParser.parse(to);
         assert this.from != null : "Parsed start time should not be null";
         assert this.to != null : "Parsed end time should not be null";
     }

@@ -66,14 +66,14 @@ public class Walter {
                     break;
 
                 case LIST:
-                    ui.showMessage("Here are the tasks in your list:");
+                    ui.showMessage("Here are the tasks in your list. I'm the one who handles the schedule:");
                     IntStream.range(0, tasks.size())
                             .forEach(i -> ui.showMessage((i + 1) + "." + tasks.get(i)));
                     break;
 
                 case MARK:
                     if (inputs.length < 2) {
-                        throw new WalterException("Please specify which task to mark.");
+                        throw new WalterException("Specify which task to mark. Apply yourself.");
                     }
                     int markIndex = Integer.parseInt(inputs[1]) - 1;
                     assert markIndex >= 0 : "Mark index should be non-negative";
@@ -81,13 +81,13 @@ public class Walter {
                     assert tMark != null : "Retrieved task should not be null";
                     tMark.markAsDone();
                     storage.save(tasks);
-                    ui.showMessage("Nice! I've marked this task as done:");
+                    ui.showMessage("It's handled. I've marked this task as done:");
                     ui.showMessage("  " + tMark);
                     break;
 
                 case UNMARK:
                     if (inputs.length < 2) {
-                        throw new WalterException("Please specify which task to unmark.");
+                        throw new WalterException("Specify which task to unmark. Don't waste my time.");
                     }
                     int unmarkIndex = Integer.parseInt(inputs[1]) - 1;
                     assert unmarkIndex >= 0 : "Unmark index should be non-negative";
@@ -95,13 +95,13 @@ public class Walter {
                     assert tUnmark != null : "Retrieved task should not be null";
                     tUnmark.unmarkAsDone();
                     storage.save(tasks);
-                    ui.showMessage("OK, I've marked this task as not done yet:");
+                    ui.showMessage("You're slipping, Jesse. I've marked this task as not done yet:");
                     ui.showMessage("  " + tUnmark);
                     break;
 
                 case DELETE:
                     if (inputs.length < 2) {
-                        throw new WalterException("Please specify which task to delete.");
+                        throw new WalterException("Specify which task to delete. No loose ends.");
                     }
                     int delIndex = Integer.parseInt(inputs[1]) - 1;
                     assert delIndex >= 0 : "Delete index should be non-negative";
@@ -109,14 +109,14 @@ public class Walter {
                     assert tDel != null : "Retrieved task should not be null";
                     tasks.delete(delIndex);
                     storage.save(tasks);
-                    ui.showMessage("Noted. I've removed this task:");
+                    ui.showMessage("No loose ends. I've removed this task:");
                     ui.showMessage("  " + tDel);
                     ui.showMessage("Now you have " + tasks.size() + " tasks in the list.");
                     break;
 
                 case TODO:
                     if (inputs.length < 2 || inputs[1].trim().isEmpty()) {
-                        throw new WalterException("The description of a todo cannot be empty.");
+                        throw new WalterException("The description of a todo cannot be empty. Jesse, we need to cook!");
                     }
                     Task todo = new Todo(inputs[1]);
                     assert todo != null : "Created todo task should not be null";
@@ -127,12 +127,12 @@ public class Walter {
 
                 case DEADLINE:
                     if (inputs.length < 2 || !inputs[1].contains(" /by ")) {
-                        throw new WalterException("A deadline must include '/by' to specify the date.");
+                        throw new WalterException("A deadline must include '/by'. Time is money.");
                     }
                     String[] dParts = inputs[1].split(" /by ");
                     assert dParts.length == 2 : "Deadline parts should be split into exactly 2 parts";
                     if (dParts[0].trim().isEmpty()) {
-                        throw new WalterException("The description of a deadline cannot be empty.");
+                        throw new WalterException("The description of a deadline cannot be empty. Apply yourself!");
                     }
                     Task deadline = new Deadline(dParts[0], dParts[1]);
                     assert deadline != null : "Created deadline task should not be null";
@@ -142,19 +142,19 @@ public class Walter {
                     break;
                 case FIND:
                     if (inputs.length < 2) {
-                        throw new WalterException("Please specify a keyword to search.");
+                        throw new WalterException("Specify a keyword. I'm not a mind reader.");
                     }
                     String keyword = inputs[1];
                     assert keyword != null : "Search keyword should not be null";
                     ArrayList<Task> foundTasks = tasks.find(keyword);
-                    assert foundTasks != null : "Found tasks list should not be null"; // You need to implement this in TaskList
-                    ui.showMessage("Here are the matching tasks in your list:");
+                    assert foundTasks != null : "Found tasks list should not be null";
+                    ui.showMessage("I'll find what you're looking for. Here are the matches:");
                     IntStream.range(0, foundTasks.size())
                             .forEach(i -> ui.showMessage((i + 1) + "." + foundTasks.get(i)));
                     break;
                 case EVENT:
                     if (inputs.length < 2 || !inputs[1].contains(" /from ") || !inputs[1].contains(" /to ")) {
-                        throw new WalterException("An event must include '/from' and '/to' to specify the timing.");
+                        throw new WalterException("An event must include '/from' and '/to'. Precision is key.");
                     }
                     String[] eParts = inputs[1].split(" /from ");
                     assert eParts.length == 2 : "Event description and time should be split into 2 parts";
@@ -173,16 +173,21 @@ public class Walter {
             } catch (WalterException e) {
                 ui.showError(e.getMessage());
             } catch (DateTimeParseException e) {
-                ui.showError("Invalid date format. Please use 'd/M/yyyy HHmm' or natural language (e.g., 'today', 'tomorrow', 'Mon').");
-                ui.showError("Example: 2/12/2019 1800 or Mon 1800");
+                ui.showError("Invalid date format. Apply yourself! Use 'd/M/yyyy HHmm'.");
             } catch (NumberFormatException e) {
-                ui.showError("Please enter a valid number.");
+                ui.showError("Enter a valid number. Don't make me repeat myself.");
             } catch (IndexOutOfBoundsException e) {
-                ui.showError("That task number does not exist.");
+                ui.showError("That task number does not exist. No loose ends.");
             } finally {
                 ui.showLine();
             }
         }
+    }
+
+    private void printAdded(Task task) {
+        ui.showMessage("Jesse, we need to work. I've added this task:");
+        ui.showMessage("  " + task);
+        ui.showMessage("Now you have " + tasks.size() + " tasks in the list.");
     }
 
     /**
@@ -201,9 +206,9 @@ public class Walter {
             assert inputs != null : "Inputs array should not be null";
             switch (command) {
             case BYE:
-                return "Bye. Hope to see you again soon!";
+                return "We're done when I say we're done. Stay out of my territory.";
             case LIST:
-                StringBuilder sb = new StringBuilder("Here are the tasks in your list:\n");
+                StringBuilder sb = new StringBuilder("Here are the tasks in your list. I'm the one who handles the schedule:\n");
                 IntStream.range(0, tasks.size())
                         .peek(i -> {
                             Task task = tasks.get(i);
@@ -215,7 +220,7 @@ public class Walter {
                 return resultList;
             case MARK:
                 if (inputs.length < 2) {
-                    throw new WalterException("Please specify which task to mark.");
+                    throw new WalterException("Specify which task to mark. Apply yourself.");
                 }
                 int markIndex = Integer.parseInt(inputs[1]) - 1;
                 assert markIndex >= 0 : "Mark index should be non-negative";
@@ -223,12 +228,12 @@ public class Walter {
                 assert tMark != null : "Retrieved task should not be null";
                 tMark.markAsDone();
                 storage.save(tasks);
-                String markResult = "Nice! I've marked this task as done:\n  " + tMark;
+                String markResult = "It's handled. I've marked this task as done:\n  " + tMark;
                 assert markResult != null : "Result string should not be null";
                 return markResult;
             case UNMARK:
                 if (inputs.length < 2) {
-                    throw new WalterException("Please specify which task to unmark.");
+                    throw new WalterException("Specify which task to unmark. Don't waste my time.");
                 }
                 int unmarkIndex = Integer.parseInt(inputs[1]) - 1;
                 assert unmarkIndex >= 0 : "Unmark index should be non-negative";
@@ -236,12 +241,12 @@ public class Walter {
                 assert tUnmark != null : "Retrieved task should not be null";
                 tUnmark.unmarkAsDone();
                 storage.save(tasks);
-                String unmarkResult = "OK, I've marked this task as not done yet:\n  " + tUnmark;
+                String unmarkResult = "You're slipping, Jesse. I've marked this task as not done yet:\n  " + tUnmark;
                 assert unmarkResult != null : "Result string should not be null";
                 return unmarkResult;
             case DELETE:
                 if (inputs.length < 2) {
-                    throw new WalterException("Please specify which task to delete.");
+                    throw new WalterException("Specify which task to delete. No loose ends.");
                 }
                 int delIndex = Integer.parseInt(inputs[1]) - 1;
                 assert delIndex >= 0 : "Delete index should be non-negative";
@@ -249,42 +254,42 @@ public class Walter {
                 assert tDel != null : "Retrieved task should not be null";
                 tasks.delete(delIndex);
                 storage.save(tasks);
-                String delResult = "Noted. I've removed this task:\n  " + tDel + "\nNow you have " + tasks.size()
+                String delResult = "No loose ends. I've removed this task:\n  " + tDel + "\nNow you have " + tasks.size()
                         + " tasks in the list.";
                 assert delResult != null : "Result string should not be null";
                 return delResult;
             case TODO:
                 if (inputs.length < 2 || inputs[1].trim().isEmpty()) {
-                    throw new WalterException("The description of a todo cannot be empty.");
+                    throw new WalterException("The description of a todo cannot be empty. Jesse, we need to cook!");
                 }
                 Task todo = new Todo(inputs[1]);
                 assert todo != null : "Created todo task should not be null";
                 tasks.add(todo);
                 storage.save(tasks);
-                String todoResult = "Got it. I've added this task:\n  " + todo + "\nNow you have " + tasks.size()
+                String todoResult = "Jesse, we need to work. I've added this task:\n  " + todo + "\nNow you have " + tasks.size()
                         + " tasks in the list.";
                 assert todoResult != null : "Result string should not be null";
                 return todoResult;
             case DEADLINE:
                 if (inputs.length < 2 || !inputs[1].contains(" /by ")) {
-                    throw new WalterException("A deadline must include '/by' to specify the date.");
+                    throw new WalterException("A deadline must include '/by'. Time is money.");
                 }
                 String[] dParts = inputs[1].split(" /by ");
                 assert dParts.length == 2 : "Deadline parts should be split into exactly 2 parts";
                 if (dParts[0].trim().isEmpty()) {
-                    throw new WalterException("The description of a deadline cannot be empty.");
+                    throw new WalterException("The description of a deadline cannot be empty. Apply yourself!");
                 }
                 Task deadline = new Deadline(dParts[0], dParts[1]);
                 assert deadline != null : "Created deadline task should not be null";
                 tasks.add(deadline);
                 storage.save(tasks);
-                String deadlineResult = "Got it. I've added this task:\n  " + deadline + "\nNow you have "
+                String deadlineResult = "Time is of the essence. I've added this task:\n  " + deadline + "\nNow you have "
                         + tasks.size() + " tasks in the list.";
                 assert deadlineResult != null : "Result string should not be null";
                 return deadlineResult;
             case EVENT:
                 if (inputs.length < 2 || !inputs[1].contains(" /from ") || !inputs[1].contains(" /to ")) {
-                    throw new WalterException("An event must include '/from' and '/to' to specify the timing.");
+                    throw new WalterException("An event must include '/from' and '/to'. Precision is key.");
                 }
                 String[] eParts = inputs[1].split(" /from ");
                 assert eParts.length == 2 : "Event description and time should be split into 2 parts";
@@ -295,19 +300,19 @@ public class Walter {
                 assert event != null : "Created event task should not be null";
                 tasks.add(event);
                 storage.save(tasks);
-                String eventResult = "Got it. I've added this task:\n  " + event + "\nNow you have " + tasks.size()
+                String eventResult = "I've added this event to the schedule:\n  " + event + "\nNow you have " + tasks.size()
                         + " tasks in the list.";
                 assert eventResult != null : "Result string should not be null";
                 return eventResult;
             case FIND:
                 if (inputs.length < 2) {
-                    throw new WalterException("Please specify a keyword to search.");
+                    throw new WalterException("Specify a keyword. I'm not a mind reader.");
                 }
                 String keyword = inputs[1];
                 assert keyword != null : "Search keyword should not be null";
                 ArrayList<Task> foundTasks = tasks.find(keyword);
                 assert foundTasks != null : "Found tasks list should not be null";
-                StringBuilder sbFind = new StringBuilder("Here are the matching tasks in your list:\n");
+                StringBuilder sbFind = new StringBuilder("I'll find what you're looking for. Here are the matches:\n");
                 IntStream.range(0, foundTasks.size())
                     .peek(i -> {
                         Task foundTask = foundTasks.get(i);
@@ -318,23 +323,17 @@ public class Walter {
                 assert findResult != null : "Result string should not be null";
                 return findResult;
             default:
-                return "Unknown command.";
+                return "Unknown command. Stay out of my territory.";
             }
         } catch (WalterException e) {
-            return "OOPS!!! " + e.getMessage();
+            return "You clearly don't know who you're talking to. " + e.getMessage();
         } catch (DateTimeParseException e) {
-            return "OOPS!!! Invalid date format. Please use 'd/M/yyyy HHmm'.\nExample: 2/12/2019 1800";
+            return "Invalid date format. Apply yourself! Use 'd/M/yyyy HHmm'.";
         } catch (NumberFormatException e) {
-            return "OOPS!!! Please enter a valid number.";
+            return "Enter a valid number. Don't make me repeat myself.";
         } catch (IndexOutOfBoundsException e) {
-            return "OOPS!!! That task number does not exist.";
+            return "That task number does not exist. No loose ends.";
         }
-    }
-
-    private void printAdded(Task task) {
-        ui.showMessage("Got it. I've added this task:");
-        ui.showMessage("  " + task);
-        ui.showMessage("Now you have " + tasks.size() + " tasks in the list.");
     }
 
     public static void main(String[] args) {

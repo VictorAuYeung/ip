@@ -11,7 +11,7 @@ public class Parser {
         try {
             return Command.valueOf(commandString);
         } catch (IllegalArgumentException e) {
-            throw new WalterException("I'm sorry, but I don't know what that means :-(");
+            throw new WalterException("Unknown command. Stay out of my territory.");
         }
     }
 }

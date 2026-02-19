@@ -34,7 +34,7 @@ public class Ui {
      */
     public void showWelcome() {
         showLine();
-        System.out.println("     Hello! I'm Walter\n     What can I do for you?");
+        System.out.println("     I am the one who knocks! I am Walter White.\n     What do you need? Apply yourself.");
         showLine();
     }
 
@@ -42,7 +42,7 @@ public class Ui {
      * Displays the farewell message when the user exits the application.
      */
     public void showBye() {
-        System.out.println("     Bye. Hope to see you again soon!");
+        System.out.println("     We're done when I say we're done. Stay out of my territory.");
     }
 
     /**
@@ -60,14 +60,14 @@ public class Ui {
      * @param message The specific error message to display.
      */
     public void showError(String message) {
-        System.out.println("     OOPS!!! " + message);
+        System.out.println("     You clearly don't know who you're talking to. " + message);
     }
 
     /**
      * Displays a specific error message indicating that the storage file could not be loaded.
      */
     public void showLoadingError() {
-        System.out.println("     OOPS!!! Error loading file. Starting with empty list.");
+        System.out.println("     Error loading file. I'll start with an empty list for now.");
     }
 
     /**

@@ -62,17 +62,17 @@ public class DialogBox extends HBox {
 
     public static DialogBox getUserDialog(String s, Image i) {
         var db = new DialogBox(s, i);
-        db.text.setStyle("-fx-background-color: #DCF8C6; -fx-background-radius: 10;");
+        db.text.setStyle("-fx-background-color: #a6d9f7; -fx-background-radius: 10; -fx-text-fill: black; -fx-font-family: 'Courier New';");
         return db;
     }
 
     public static DialogBox getWalterDialog(String s, Image i) {
         var db = new DialogBox(s, i);
         db.flip();
-        if (s.startsWith("OOPS!!!")) {
-            db.text.setStyle("-fx-background-color: #F8D7DA; -fx-text-fill: #721C24; -fx-background-radius: 10;");
+        if (s.contains("You clearly don't know who you're talking to") || s.contains("Invalid date format") || s.contains("Enter a valid number") || s.contains("That task number does not exist")) {
+            db.text.setStyle("-fx-background-color: #8b0000; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-family: 'Courier New';");
         } else {
-            db.text.setStyle("-fx-background-color: #E2E2E2; -fx-background-radius: 10;");
+            db.text.setStyle("-fx-background-color: #065535; -fx-background-radius: 10; -fx-text-fill: white; -fx-font-family: 'Courier New';");
         }
         return db;
     }

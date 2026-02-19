@@ -49,7 +49,7 @@ public class Main extends Application {
         stage.show();
 
         // Step 2. Formatting the window to look as expected
-        stage.setTitle("Walter");
+        stage.setTitle("Walter's Task Manager");
         stage.setResizable(true);
         stage.setMinHeight(600.0);
         stage.setMinWidth(400.0);
@@ -69,11 +69,11 @@ public class Main extends Application {
         dialogContainer.setStyle("-fx-background-color: #F4F4F4;");
 
         userInput.setPrefHeight(40.0);
-        userInput.setStyle("-fx-background-radius: 20; -fx-padding: 0 15 0 15;");
+        userInput.setStyle("-fx-background-radius: 20; -fx-padding: 0 15 0 15; -fx-background-color: #333333; -fx-text-fill: white;");
         
         sendButton.setPrefHeight(40.0);
         sendButton.setPrefWidth(60.0);
-        sendButton.setStyle("-fx-background-radius: 20; -fx-background-color: #007AFF; -fx-text-fill: white; -fx-font-weight: bold;");
+        sendButton.setStyle("-fx-background-radius: 20; -fx-background-color: #065535; -fx-text-fill: white; -fx-font-weight: bold;");
 
         AnchorPane.setTopAnchor(scrollPane, 0.0);
         AnchorPane.setLeftAnchor(scrollPane, 0.0);
@@ -92,8 +92,8 @@ public class Main extends Application {
             handleUserInput();
         });
 
-        sendButton.setOnMouseEntered(e -> sendButton.setStyle("-fx-background-radius: 20; -fx-background-color: #0056b3; -fx-text-fill: white; -fx-font-weight: bold;"));
-        sendButton.setOnMouseExited(e -> sendButton.setStyle("-fx-background-radius: 20; -fx-background-color: #007AFF; -fx-text-fill: white; -fx-font-weight: bold;"));
+        sendButton.setOnMouseEntered(e -> sendButton.setStyle("-fx-background-radius: 20; -fx-background-color: #043a24; -fx-text-fill: white; -fx-font-weight: bold;"));
+        sendButton.setOnMouseExited(e -> sendButton.setStyle("-fx-background-radius: 20; -fx-background-color: #065535; -fx-text-fill: white; -fx-font-weight: bold;"));
 
         userInput.setOnAction((event) -> {
             handleUserInput();
@@ -103,7 +103,7 @@ public class Main extends Application {
         dialogContainer.heightProperty().addListener((observable) -> scrollPane.setVvalue(1.0));
 
         // Step 4. Display welcome message on startup
-        String welcomeMessage = "Hello! I'm Walter\nWhat can I do for you?";
+        String welcomeMessage = "I am the one who knocks! I am Walter White.\nWhat do you need? Apply yourself.";
         dialogContainer.getChildren().add(
                 DialogBox.getWalterDialog(welcomeMessage, walterImage)
         );

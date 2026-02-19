@@ -1,6 +1,7 @@
 package walter;
 
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -49,13 +50,12 @@ public class Main extends Application {
 
         // Step 2. Formatting the window to look as expected
         stage.setTitle("Walter");
-        stage.setResizable(false);
+        stage.setResizable(true);
         stage.setMinHeight(600.0);
         stage.setMinWidth(400.0);
 
         mainLayout.setPrefSize(400.0, 600.0);
 
-        scrollPane.setPrefSize(385, 535);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
 
@@ -64,23 +64,36 @@ public class Main extends Application {
 
         // You will need to import `javafx.scene.layout.Region` for this.
         dialogContainer.setPrefHeight(Region.USE_COMPUTED_SIZE);
+        dialogContainer.setPadding(new Insets(10));
+        dialogContainer.setSpacing(10);
+        dialogContainer.setStyle("-fx-background-color: #F4F4F4;");
 
-        userInput.setPrefWidth(325.0);
+        userInput.setPrefHeight(40.0);
+        userInput.setStyle("-fx-background-radius: 20; -fx-padding: 0 15 0 15;");
+        
+        sendButton.setPrefHeight(40.0);
+        sendButton.setPrefWidth(60.0);
+        sendButton.setStyle("-fx-background-radius: 20; -fx-background-color: #007AFF; -fx-text-fill: white; -fx-font-weight: bold;");
 
-        sendButton.setPrefWidth(55.0);
-
-        AnchorPane.setTopAnchor(scrollPane, 1.0);
-
-        AnchorPane.setBottomAnchor(sendButton, 1.0);
-        AnchorPane.setRightAnchor(sendButton, 1.0);
+        AnchorPane.setTopAnchor(scrollPane, 0.0);
+        AnchorPane.setLeftAnchor(scrollPane, 0.0);
+        AnchorPane.setRightAnchor(scrollPane, 0.0);
+        AnchorPane.setBottomAnchor(scrollPane, 42.0);
 
         AnchorPane.setLeftAnchor(userInput, 1.0);
         AnchorPane.setBottomAnchor(userInput, 1.0);
+        AnchorPane.setRightAnchor(userInput, 62.0);
+
+        AnchorPane.setBottomAnchor(sendButton, 1.0);
+        AnchorPane.setRightAnchor(sendButton, 1.0);
 
         // Step 3. Add functionality to handle user input.
         sendButton.setOnMouseClicked((event) -> {
             handleUserInput();
         });
+
+        sendButton.setOnMouseEntered(e -> sendButton.setStyle("-fx-background-radius: 20; -fx-background-color: #0056b3; -fx-text-fill: white; -fx-font-weight: bold;"));
+        sendButton.setOnMouseExited(e -> sendButton.setStyle("-fx-background-radius: 20; -fx-background-color: #007AFF; -fx-text-fill: white; -fx-font-weight: bold;"));
 
         userInput.setOnAction((event) -> {
             handleUserInput();

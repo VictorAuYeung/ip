@@ -1,9 +1,9 @@
 package walter;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -39,28 +39,8 @@ public class Storage {
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
-                assert line != null : "Line read from file should not be null";
-                String[] parts = line.split(" \\| ");
-                assert parts.length >= 3 : "Task file format should have at least 3 parts";
-
-                Task task = null;
-                assert parts[0] != null : "Task type should not be null";
-                switch (parts[0]) {
-                case "T":
-                    task = new Todo(parts[2]);
-                    break;
-                case "D":
-                    task = new Deadline(parts[2], parts[3]);
-                    break;
-                case "E":
-                    task = new Event(parts[2], parts[3], parts[4]);
-                    break;
-                }
-
+                Task task = parseTaskFromLine(line);
                 if (task != null) {
-                    if (parts[1].equals("1")) {
-                        task.markAsDone();
-                    }
                     tasks.add(task);
                 }
             }
@@ -71,6 +51,33 @@ public class Storage {
             throw new WalterException("Corrupted data file.");
         }
         return tasks;
+    }
+
+    private Task parseTaskFromLine(String line) throws WalterException {
+        assert line != null : "Line read from file should not be null";
+        String[] parts = line.split(" \\| ");
+        assert parts.length >= 3 : "Task file format should have at least 3 parts";
+
+        Task task = null;
+        assert parts[0] != null : "Task type should not be null";
+        switch (parts[0]) {
+        case "T":
+            task = new Todo(parts[2]);
+            break;
+        case "D":
+            task = new Deadline(parts[2], parts[3]);
+            break;
+        case "E":
+            task = new Event(parts[2], parts[3], parts[4]);
+            break;
+        default:
+            return null;
+        }
+
+        if (parts[1].equals("1")) {
+            task.markAsDone();
+        }
+        return task;
     }
 
     /**

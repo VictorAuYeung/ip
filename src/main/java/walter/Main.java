@@ -30,9 +30,13 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
-        // Step 1. Setting up required components
+        setupComponents();
+        formatWindow(stage);
+        addEventHandlers();
+        showWelcomeMessage();
+    }
 
-        // The container for the content of the chat to scroll.
+    private void setupComponents() {
         scrollPane = new ScrollPane();
         dialogContainer = new VBox();
         scrollPane.setContent(dialogContainer);
@@ -44,36 +48,38 @@ public class Main extends Application {
         mainLayout.getChildren().addAll(scrollPane, userInput, sendButton);
 
         scene = new Scene(mainLayout);
+    }
 
+    private void formatWindow(Stage stage) {
         stage.setScene(scene);
         stage.show();
 
-        // Step 2. Formatting the window to look as expected
         stage.setTitle("Walter's Task Manager");
         stage.setResizable(true);
         stage.setMinHeight(600.0);
         stage.setMinWidth(400.0);
 
+        AnchorPane mainLayout = (AnchorPane) scene.getRoot();
         mainLayout.setPrefSize(400.0, 600.0);
 
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
-
         scrollPane.setVvalue(1.0);
         scrollPane.setFitToWidth(true);
 
-        // You will need to import `javafx.scene.layout.Region` for this.
         dialogContainer.setPrefHeight(Region.USE_COMPUTED_SIZE);
         dialogContainer.setPadding(new Insets(10));
         dialogContainer.setSpacing(10);
         dialogContainer.setStyle("-fx-background-color: #F4F4F4;");
 
         userInput.setPrefHeight(40.0);
-        userInput.setStyle("-fx-background-radius: 20; -fx-padding: 0 15 0 15; -fx-background-color: #333333; -fx-text-fill: white;");
-        
+        userInput.setStyle("-fx-background-radius: 20; -fx-padding: 0 15 0 15; "
+                + "-fx-background-color: #333333; -fx-text-fill: white;");
+
         sendButton.setPrefHeight(40.0);
         sendButton.setPrefWidth(60.0);
-        sendButton.setStyle("-fx-background-radius: 20; -fx-background-color: #065535; -fx-text-fill: white; -fx-font-weight: bold;");
+        sendButton.setStyle("-fx-background-radius: 20; -fx-background-color: #065535; "
+                + "-fx-text-fill: white; -fx-font-weight: bold;");
 
         AnchorPane.setTopAnchor(scrollPane, 0.0);
         AnchorPane.setLeftAnchor(scrollPane, 0.0);
@@ -86,23 +92,22 @@ public class Main extends Application {
 
         AnchorPane.setBottomAnchor(sendButton, 1.0);
         AnchorPane.setRightAnchor(sendButton, 1.0);
+    }
 
-        // Step 3. Add functionality to handle user input.
-        sendButton.setOnMouseClicked((event) -> {
-            handleUserInput();
-        });
+    private void addEventHandlers() {
+        sendButton.setOnMouseClicked((event) -> handleUserInput());
 
-        sendButton.setOnMouseEntered(e -> sendButton.setStyle("-fx-background-radius: 20; -fx-background-color: #043a24; -fx-text-fill: white; -fx-font-weight: bold;"));
-        sendButton.setOnMouseExited(e -> sendButton.setStyle("-fx-background-radius: 20; -fx-background-color: #065535; -fx-text-fill: white; -fx-font-weight: bold;"));
+        sendButton.setOnMouseEntered(e -> sendButton.setStyle("-fx-background-radius: 20; "
+                + "-fx-background-color: #043a24; -fx-text-fill: white; -fx-font-weight: bold;"));
+        sendButton.setOnMouseExited(e -> sendButton.setStyle("-fx-background-radius: 20; "
+                + "-fx-background-color: #065535; -fx-text-fill: white; -fx-font-weight: bold;"));
 
-        userInput.setOnAction((event) -> {
-            handleUserInput();
-        });
+        userInput.setOnAction((event) -> handleUserInput());
 
-        // Scroll down to the end every time dialogContainer's height changes.
         dialogContainer.heightProperty().addListener((observable) -> scrollPane.setVvalue(1.0));
+    }
 
-        // Step 4. Display welcome message on startup
+    private void showWelcomeMessage() {
         String welcomeMessage = "I am the one who knocks! I am Walter White.\nWhat do you need? Apply yourself.";
         dialogContainer.getChildren().add(
                 DialogBox.getWalterDialog(welcomeMessage, walterImage)
@@ -110,8 +115,8 @@ public class Main extends Application {
     }
 
     /**
-     * Iteration 2: Creating two dialog boxes, one echoing user input and the other containing Walter's reply
-     * and then appending them to the dialog container. Clears the user input after processing.
+     * Creates two dialog boxes, one echoing user input and the other containing Walter's reply
+     * and then appends them to the dialog container. Clears the user input after processing.
      */
     private void handleUserInput() {
         String userText = userInput.getText();

@@ -1,7 +1,8 @@
-package walter;  // Same package as main code
+package walter; // Same package as main code
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TodoTest {
 

@@ -1,5 +1,8 @@
 package walter;
 
+/**
+ * Represents the types of commands that Walter can execute.
+ */
 public enum Command {
     FIND,
     BYE,

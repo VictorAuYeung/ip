@@ -77,13 +77,27 @@ public class DateParser {
     }
 
     private static DayOfWeek getDayOfWeek(String input) {
-        if (input.startsWith("mon")) return DayOfWeek.MONDAY;
-        if (input.startsWith("tue")) return DayOfWeek.TUESDAY;
-        if (input.startsWith("wed")) return DayOfWeek.WEDNESDAY;
-        if (input.startsWith("thu")) return DayOfWeek.THURSDAY;
-        if (input.startsWith("fri")) return DayOfWeek.FRIDAY;
-        if (input.startsWith("sat")) return DayOfWeek.SATURDAY;
-        if (input.startsWith("sun")) return DayOfWeek.SUNDAY;
+        if (input.startsWith("mon")) {
+            return DayOfWeek.MONDAY;
+        }
+        if (input.startsWith("tue")) {
+            return DayOfWeek.TUESDAY;
+        }
+        if (input.startsWith("wed")) {
+            return DayOfWeek.WEDNESDAY;
+        }
+        if (input.startsWith("thu")) {
+            return DayOfWeek.THURSDAY;
+        }
+        if (input.startsWith("fri")) {
+            return DayOfWeek.FRIDAY;
+        }
+        if (input.startsWith("sat")) {
+            return DayOfWeek.SATURDAY;
+        }
+        if (input.startsWith("sun")) {
+            return DayOfWeek.SUNDAY;
+        }
         return null;
     }
 }

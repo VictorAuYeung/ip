@@ -110,7 +110,7 @@ public class Main extends Application {
     }
 
     /**
-     * Iteration 2: Creating two dialog boxes, one echoing user input and the other containing Duke's reply
+     * Iteration 2: Creating two dialog boxes, one echoing user input and the other containing Walter's reply
      * and then appending them to the dialog container. Clears the user input after processing.
      */
     private void handleUserInput() {

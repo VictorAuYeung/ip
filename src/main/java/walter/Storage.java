@@ -76,8 +76,9 @@ public class Storage {
     /**
      * Saves the tasks to the hard disk.
      * @param taskList The TaskList object containing the tasks to save
+     * @throws WalterException If the file cannot be written to.
      */
-    public void save(TaskList taskList) {
+    public void save(TaskList taskList) throws WalterException {
         assert taskList != null : "TaskList to save cannot be null";
         assert this.filePath != null : "File path should not be null";
         try {
@@ -90,17 +91,12 @@ public class Storage {
 
             FileWriter writer = new FileWriter(file);
 
-            taskList.getAllTasks().stream()
-                    .forEach(task -> {
-                        try {
-                            writer.write(task.toFileFormat() + "\n");
-                        } catch (IOException e) {
-                            System.out.println("Error writing task: " + e.getMessage());
-                        }
-                    });
+            for (Task task : taskList.getAllTasks()) {
+                writer.write(task.toFileFormat() + "\n");
+            }
             writer.close();
         } catch (IOException e) {
-            System.out.println("Error saving tasks: " + e.getMessage());
+            throw new WalterException("Error saving tasks: " + e.getMessage());
         }
     }
 }

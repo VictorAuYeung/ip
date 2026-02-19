@@ -2,6 +2,8 @@
 
 Walter is a task management chatbot that helps you handle your schedule with precision. Whether you are adding todos, deadlines, or events, Walter ensures there are "no loose ends."
 
+![Screenshot of Walter UI](Ui.png)
+
 ## Features
 
 ### Notes about the command format:

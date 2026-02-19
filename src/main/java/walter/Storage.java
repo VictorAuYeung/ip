@@ -15,6 +15,11 @@ import java.util.Scanner;
 public class Storage {
     private final String filePath;
 
+    /**
+     * Constructs a {@code Storage} object with the specified file path.
+     *
+     * @param filePath The path to the file where tasks are stored.
+     */
     public Storage(String filePath) {
         this.filePath = filePath;
     }

@@ -2,12 +2,15 @@ package walter;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
+import javafx.scene.shape.Circle;
 
 /**
  * A custom control using FXML is defined as a class that extends {@link javafx.scene.layout.HBox}.
@@ -31,10 +34,19 @@ public class DialogBox extends HBox {
 
         // Styling
         text.setWrapText(true);
-        displayPicture.setFitWidth(100.0);
-        displayPicture.setFitHeight(100.0);
+        text.setPadding(new Insets(10));
+        text.setMinHeight(Region.USE_PREF_SIZE);
+
+        displayPicture.setFitWidth(50.0);
+        displayPicture.setFitHeight(50.0);
+
+        // Crop the profile picture as a circle
+        Circle clip = new Circle(25, 25, 25);
+        displayPicture.setClip(clip);
 
         this.setAlignment(Pos.TOP_RIGHT);
+        this.setPadding(new Insets(10));
+        this.setSpacing(10);
         this.getChildren().addAll(text, displayPicture);
     }
 
@@ -49,12 +61,19 @@ public class DialogBox extends HBox {
     }
 
     public static DialogBox getUserDialog(String s, Image i) {
-        return new DialogBox(s, i);
+        var db = new DialogBox(s, i);
+        db.text.setStyle("-fx-background-color: #DCF8C6; -fx-background-radius: 10;");
+        return db;
     }
 
     public static DialogBox getWalterDialog(String s, Image i) {
         var db = new DialogBox(s, i);
         db.flip();
+        if (s.startsWith("OOPS!!!")) {
+            db.text.setStyle("-fx-background-color: #F8D7DA; -fx-text-fill: #721C24; -fx-background-radius: 10;");
+        } else {
+            db.text.setStyle("-fx-background-color: #E2E2E2; -fx-background-radius: 10;");
+        }
         return db;
     }
 }

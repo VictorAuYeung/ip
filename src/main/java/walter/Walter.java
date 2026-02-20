@@ -16,6 +16,7 @@ public class Walter {
     private Storage storage;
     private TaskList tasks;
     private Ui ui;
+    private boolean isShuttingDown = false;
 
 
     /**
@@ -262,6 +263,7 @@ public class Walter {
     private String handleResponse(Command command, String[] inputs) throws WalterException {
         switch (command) {
         case BYE:
+            isShuttingDown = true;
             return "We're done when I say we're done. Stay out of my territory.";
         case LIST:
             return generateListResponse();
@@ -400,6 +402,15 @@ public class Walter {
             })
             .forEach(i -> sbFind.append((i + 1) + "." + foundTasks.get(i) + "\n"));
         return sbFind.toString();
+    }
+
+    /**
+     * Checks if the application should shut down.
+     *
+     * @return true if the bye command has been executed, false otherwise.
+     */
+    public boolean shouldShutdown() {
+        return isShuttingDown;
     }
 
     /**

@@ -32,7 +32,7 @@ public class Main extends Application {
     public void start(Stage stage) {
         setupComponents();
         formatWindow(stage);
-        addEventHandlers();
+        addEventHandlers(stage);
         showWelcomeMessage();
     }
 
@@ -94,15 +94,15 @@ public class Main extends Application {
         AnchorPane.setRightAnchor(sendButton, 1.0);
     }
 
-    private void addEventHandlers() {
-        sendButton.setOnMouseClicked((event) -> handleUserInput());
+    private void addEventHandlers(Stage stage) {
+        sendButton.setOnMouseClicked((event) -> handleUserInput(stage));
 
         sendButton.setOnMouseEntered(e -> sendButton.setStyle("-fx-background-radius: 20; "
                 + "-fx-background-color: #043a24; -fx-text-fill: white; -fx-font-weight: bold;"));
         sendButton.setOnMouseExited(e -> sendButton.setStyle("-fx-background-radius: 20; "
                 + "-fx-background-color: #065535; -fx-text-fill: white; -fx-font-weight: bold;"));
 
-        userInput.setOnAction((event) -> handleUserInput());
+        userInput.setOnAction((event) -> handleUserInput(stage));
 
         dialogContainer.heightProperty().addListener((observable) -> scrollPane.setVvalue(1.0));
     }
@@ -117,8 +117,11 @@ public class Main extends Application {
     /**
      * Creates two dialog boxes, one echoing user input and the other containing Walter's reply
      * and then appends them to the dialog container. Clears the user input after processing.
+     * Closes the application if the bye command is executed.
+     *
+     * @param stage The JavaFX stage to close when bye command is executed.
      */
-    private void handleUserInput() {
+    private void handleUserInput(Stage stage) {
         String userText = userInput.getText();
         String walterText = walter.getResponse(userInput.getText());
         dialogContainer.getChildren().addAll(
@@ -126,5 +129,9 @@ public class Main extends Application {
                 DialogBox.getWalterDialog(walterText, walterImage)
         );
         userInput.clear();
+
+        if (walter.shouldShutdown()) {
+            stage.close();
+        }
     }
 }
